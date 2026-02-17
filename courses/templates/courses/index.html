@@ -1,0 +1,53 @@
+{% extends 'courses/base.html' %}
+{% load static %}
+
+{% block title %}Главная - Обучение геологии{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Изучайте прикладную геологию онлайн</h1>
+                <p class="lead mb-4">Профессиональные курсы для геологов и всех, кто хочет освоить эту увлекательную науку.</p>
+                {% if not user.is_authenticated %}
+                <a href="{% url 'courses:register' %}" class="btn btn-primary btn-lg">Начать обучение</a>
+                {% else %}
+                <a href="{% url 'courses:course_list' %}" class="btn btn-primary btn-lg">Перейти к курсам</a>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <img src="https://via.placeholder.com/600x400" alt="Геология" class="img-fluid rounded">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Последние курсы</h2>
+        <div class="row g-4">
+            {% for course in courses %}
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    {% if course.image %}
+                    <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="{{ course.title }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ course.title }}</h5>
+                        <p class="card-text">{{ course.description|truncatewords:20 }}</p>
+                        <a href="{% url 'courses:course_detail' course.id %}" class="btn btn-outline-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p>Пока нет доступных курсов</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,540 @@
+/* ==========================================================================
+   Стили в стиле Яндекс.Учебника (education.yandex.ru/handbook/ml)
+   Актуальная цветовая палитра
+   ========================================================================== */
+
+/* --- Подключение шрифтов --- */
+:root {
+    --font-primary: 'Yandex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+
+    /* Цветовая палитра Яндекс.Учебника */
+    --color-bg-primary: #ffffff;          /* Основной фон страницы */
+    --color-bg-secondary: #f9f9fb;        /* Фон для карточек и подвала */
+    --color-bg-accent: #f0f2f5;           /* Фон для выделенных элементов (code, nav) */
+    --color-text-primary: #1a1b22;        /* Основной цвет текста */
+    --color-text-secondary: #7f828b;      /* Второстепенный текст */
+    --color-text-tertiary: #b3b6bf;       /* Самый светлый текст (мета-информация) */
+    --color-accent: #6d93f4;               /* Акцентный синий (ссылки, кнопки) */
+    --color-accent-hover: #88b0f3;         /* Более тёмный синий для ховера */
+    --color-border: #e6e8ed;               /* Цвет границ */
+    --color-card-shadow: rgba(0, 0, 0, 0.04); /* Тень для карточек */
+}
+
+/* --- Базовые стили --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-primary);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-primary);
+    line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Типографика --- */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--color-text-primary);
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 2.5rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+h3 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 2rem 0 1rem;
+}
+
+p {
+    margin-bottom: 1.25rem;
+    color: var(--color-text-primary);
+}
+
+a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--color-accent-hover);
+    text-decoration: underline;
+}
+
+/* --- Навигационная панель --- */
+.navbar {
+    background-color: var(--color-bg-primary) !important;
+    border-bottom: 1px solid var(--color-border);
+    padding: 0.75rem 1rem;
+    box-shadow: none;
+}
+
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--color-text-primary) !important;
+    letter-spacing: -0.01em;
+}
+
+.navbar-brand i, .navbar-brand .fas {
+    color: var(--color-accent);
+    margin-right: 0.5rem;
+}
+
+.navbar-nav .nav-link {
+    color: var(--color-text-secondary) !important;
+    font-weight: 400;
+    padding: 0.5rem 1rem !important;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link:focus {
+    color: var(--color-text-primary) !important;
+    background-color: transparent;
+}
+
+.navbar-nav .btn-outline-light {
+    color: var(--color-text-secondary) !important;
+    border-color: var(--color-border);
+    background-color: transparent;
+    padding: 0.375rem 1rem;
+    font-size: 0.95rem;
+    border-radius: 20px;
+}
+
+.navbar-nav .btn-outline-light:hover {
+    background-color: var(--color-bg-secondary);
+    border-color: var(--color-border);
+    color: var(--color-text-primary) !important;
+}
+
+/* --- Герой-секция (главная страница) --- */
+.hero-section {
+    background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
+    padding: 4rem 0 3rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+}
+
+.hero-section .lead {
+    font-size: 1.25rem;
+    color: var(--color-text-secondary);
+    max-width: 80%;
+}
+
+.hero-section .btn-primary {
+    background-color: var(--color-accent);
+    border: none;
+    border-radius: 24px;
+    padding: 0.75rem 2rem;
+    font-weight: 500;
+    font-size: 1rem;
+    box-shadow: none;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.hero-section .btn-primary:hover {
+    background-color: var(--color-accent-hover);
+    transform: scale(1.02);
+}
+
+/* --- Карточки курсов --- */
+.card {
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    background-color: var(--color-bg-primary);
+    box-shadow: 0 4px 12px var(--color-card-shadow);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    overflow: hidden;
+    height: 100%;
+}
+
+.card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    border-color: #d0d4dd;
+}
+
+.card-img-top {
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-bg-secondary);
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--color-text-primary);
+}
+
+.card-text {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+.card .badge {
+    background-color: var(--color-bg-secondary) !important;
+    color: var(--color-text-secondary);
+    font-weight: 400;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 20px;
+    border: 1px solid var(--color-border);
+}
+
+.card .btn-outline-primary {
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    background-color: transparent;
+    border-radius: 20px;
+    padding: 0.4rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 400;
+    transition: all 0.2s ease;
+}
+
+.card .btn-outline-primary:hover {
+    background-color: var(--color-bg-secondary);
+    border-color: var(--color-border);
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+/* --- Детальная страница курса --- */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.breadcrumb-item a {
+    color: var(--color-text-secondary);
+}
+
+.breadcrumb-item.active {
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: var(--color-text-tertiary);
+    content: "•";
+}
+
+/* Список уроков/тестов/экзаменов */
+.list-group {
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+}
+
+.list-group-item {
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    padding: 1rem 1.5rem;
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    transition: background-color 0.2s ease;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+.list-group-item:hover {
+    background-color: var(--color-bg-secondary);
+    text-decoration: none;
+}
+
+.list-group-item.active {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-accent);
+    font-weight: 500;
+    border-left: 3px solid var(--color-accent);
+}
+
+.list-group-item h6 {
+    margin-bottom: 0;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.list-group-item small {
+    color: var(--color-text-tertiary);
+    font-size: 0.85rem;
+}
+
+/* Боковая панель */
+.card .list-unstyled li {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed var(--color-border);
+}
+
+.card .list-unstyled li:last-child {
+    border-bottom: none;
+}
+
+.card .list-unstyled i {
+    color: var(--color-accent);
+    width: 1.5rem;
+}
+
+/* --- Страница урока --- */
+.lesson-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--color-text-primary);
+}
+
+.lesson-content p {
+    margin-bottom: 1.5rem;
+}
+
+.lesson-content h2, .lesson-content h3 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: none;
+}
+
+.lesson-content pre, .lesson-content code {
+    font-family: var(--font-mono);
+    background-color: var(--color-bg-secondary);
+    border-radius: 8px;
+    padding: 0.2rem 0.4rem;
+    font-size: 0.95em;
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+}
+
+.lesson-content pre {
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+.lesson-content pre code {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+/* --- Кнопки навигации и действий --- */
+.btn-outline-primary, .btn-primary, .btn-success {
+    border-radius: 24px;
+    padding: 0.6rem 1.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.btn-outline-primary {
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--color-bg-secondary);
+    border-color: var(--color-border);
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.btn-primary {
+    background-color: var(--color-accent);
+    border: none;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-accent-hover);
+    transform: translateY(-1px);
+}
+
+.btn-success {
+    background-color: #28a745; /* Оставляем стандартный зелёный для "Завершить курс" */
+    border: none;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
+}
+
+/* --- Формы --- */
+.form-control {
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-primary);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(77, 124, 254, 0.2);
+    outline: none;
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+/* --- Алерты и сообщения --- */
+.alert {
+    border-radius: 12px;
+    border: 1px solid transparent;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.alert-success {
+    background-color: #e3f7e3;
+    border-color: #c3e6c3;
+    color: #1f6d1f;
+}
+
+.alert-error, .alert-danger {
+    background-color: #fee9e9;
+    border-color: #fccfcf;
+    color: #b02a37;
+}
+
+.alert-info {
+    background-color: #e6f0ff;
+    border-color: #c2d6ff;
+    color: var(--color-accent-hover);
+}
+
+/* --- Футер --- */
+footer {
+    background-color: var(--color-bg-secondary) !important;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    margin-top: 4rem !important;
+}
+
+footer p {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+}
+
+/* --- Адаптивность --- */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .hero-section h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-section .lead {
+        max-width: 100%;
+    }
+
+    .navbar-nav .btn-outline-light {
+        margin-top: 0.5rem;
+    }
+
+    .card-body {
+        padding: 1.25rem;
+    }
+
+    .breadcrumb {
+        font-size: 0.85rem;
+    }
+}
+
+/* --- Вкладки (для страницы курса) --- */
+.nav-tabs {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.nav-tabs .nav-link {
+    color: var(--color-text-secondary);
+    border: none;
+    padding: 0.75rem 1.25rem;
+    font-weight: 500;
+    margin-right: 0.5rem;
+    border-radius: 0;
+}
+
+.nav-tabs .nav-link:hover {
+    color: var(--color-text-primary);
+    background-color: transparent;
+    border-bottom: 2px solid var(--color-border);
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--color-accent);
+    background-color: transparent;
+    border-bottom: 2px solid var(--color-accent);
+}
+
+.nav-tabs .badge {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-secondary);
+    font-weight: 400;
+}
+
+/* --- Прогресс-бар (для страницы "Мои курсы") --- */
+.progress {
+    background-color: var(--color-bg-secondary);
+    border-radius: 10px;
+    height: 8px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background-color: var(--color-accent);
+    border-radius: 10px;
+}

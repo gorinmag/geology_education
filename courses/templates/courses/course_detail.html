@@ -1,0 +1,166 @@
+{% extends 'courses/base.html' %}
+{% load static %}
+
+{% block title %}{{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Хлебные крошки -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'courses:course_list' %}">Курсы</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ course.title }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Основная информация о курсе -->
+        <div class="col-lg-8">
+            <h1 class="mb-4">{{ course.title }}</h1>
+
+            {% if course.image %}
+            <img src="{{ course.image.url }}" class="img-fluid rounded mb-4" alt="{{ course.title }}">
+            {% endif %}
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">О курсе</h5>
+                    <p class="card-text">{{ course.description|linebreaks }}</p>
+                </div>
+            </div>
+
+            <!-- Навигационные вкладки: Уроки / Тесты / Экзамены -->
+            <ul class="nav nav-tabs mb-4" id="courseTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="lessons-tab" data-bs-toggle="tab" data-bs-target="#lessons" type="button" role="tab" aria-controls="lessons" aria-selected="true">
+                        Уроки <span class="badge bg-secondary ms-1">{{ course.lessons.count }}</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tests-tab" data-bs-toggle="tab" data-bs-target="#tests" type="button" role="tab" aria-controls="tests" aria-selected="false">
+                        Тесты <span class="badge bg-secondary ms-1">{{ course.tests.count }}</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="exams-tab" data-bs-toggle="tab" data-bs-target="#exams" type="button" role="tab" aria-controls="exams" aria-selected="false">
+                        Экзамены <span class="badge bg-secondary ms-1">{{ course.exams.count }}</span>
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Содержимое вкладок -->
+            <div class="tab-content" id="courseTabContent">
+                <!-- Вкладка Уроки -->
+                <div class="tab-pane fade show active" id="lessons" role="tabpanel" aria-labelledby="lessons-tab">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Уроки курса</h5>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            {% for lesson in lessons %}
+                            <a href="{% url 'courses:lesson_detail' course.id lesson.id %}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">Урок {{ lesson.order_num }}: {{ lesson.title }}</h6>
+                                    <small class="text-muted">
+                                        {% if lesson.has_video %}
+                                        <i class="fas fa-video"></i>
+                                        {% endif %}
+                                    </small>
+                                </div>
+                            </a>
+                            {% empty %}
+                            <div class="list-group-item text-muted">
+                                В этом курсе пока нет уроков.
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вкладка Тесты -->
+                <div class="tab-pane fade" id="tests" role="tabpanel" aria-labelledby="tests-tab">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Тесты курса</h5>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            {% for test in course.tests.all %}
+                            <a href="{% url 'courses:test_list' course.id %}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">{{ test.title }}</h6>
+                                    <small class="text-muted">{{ test.questions.count }} вопросов</small>
+                                </div>
+                                <p class="mb-1 text-muted small">{{ test.description|truncatewords:15 }}</p>
+                            </a>
+                            {% empty %}
+                            <div class="list-group-item text-muted">
+                                В этом курсе пока нет тестов.
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вкладка Экзамены -->
+                <div class="tab-pane fade" id="exams" role="tabpanel" aria-labelledby="exams-tab">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Экзамены курса</h5>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            {% for exam in course.exams.all %}
+                            <a href="{% url 'courses:exam_list' course.id %}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">{{ exam.title }}</h6>
+                                    <small class="text-muted">{{ exam.questions.count }} вопросов</small>
+                                </div>
+                                <p class="mb-1 text-muted small">{{ exam.description|truncatewords:15 }}</p>
+                            </a>
+                            {% empty %}
+                            <div class="list-group-item text-muted">
+                                В этом курсе пока нет экзаменов.
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Боковая панель с информацией о курсе -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Информация</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-book-open me-2"></i>
+                            <strong>Уроков:</strong> {{ lessons.count }}
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-puzzle-piece me-2"></i>
+                            <strong>Тестов:</strong> {{ course.tests.count }}
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-graduation-cap me-2"></i>
+                            <strong>Экзаменов:</strong> {{ course.exams.count }}
+                        </li>
+                        <li class="mb-2">
+                            <i class="far fa-calendar-alt me-2"></i>
+                            <strong>Создан:</strong> {{ course.created_at|date:"d.m.Y" }}
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-sync-alt me-2"></i>
+                            <strong>Обновлен:</strong> {{ course.updated_at|date:"d.m.Y" }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

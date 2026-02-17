@@ -1,0 +1,53 @@
+{% extends 'courses/base.html' %}
+{% load static %}
+
+{% block title %}Мои курсы{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-5">Мои курсы</h1>
+    
+    {% if courses_list %}
+        <div class="row g-4">
+            {% for item in courses_list %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm">
+                    {% if item.course.image %}
+                    <img src="{{ item.course.image.url }}" class="card-img-top" alt="{{ item.course.title }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="...">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ item.course.title }}</h5>
+                        <p class="card-text text-muted small mb-2">{{ item.total_lessons }} уроков</p>
+                        
+                        <!-- Прогресс-бар -->
+                        <div class="progress mb-2" style="height: 8px;">
+                            <div class="progress-bar bg-primary" role="progressbar" 
+                                 style="width: {{ item.percent }}%;" 
+                                 aria-valuenow="{{ item.percent }}" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                            </div>
+                        </div>
+                        
+                        <p class="text-muted small mb-3">
+                            Пройдено {{ item.viewed_count }} из {{ item.total_lessons }} ({{ item.percent }}%)
+                        </p>
+                        
+                        <a href="{% url 'courses:course_detail' item.course.id %}" class="btn btn-outline-primary btn-sm mt-auto align-self-start">
+                            Продолжить
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            Вы еще не начали ни одного курса. 
+            <a href="{% url 'courses:course_list' %}" class="alert-link">Перейти к каталогу</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

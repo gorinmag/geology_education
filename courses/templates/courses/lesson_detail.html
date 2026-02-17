@@ -1,0 +1,93 @@
+{% extends 'courses/base.html' %}
+{% load static %}
+
+{% block title %}{{ lesson.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'courses:course_list' %}">Курсы</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'courses:course_detail' course.id %}">{{ course.title }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ lesson.title }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <h1 class="mb-4">{{ lesson.title }}</h1>
+
+            {% if lesson.video_url or lesson.video_file %}
+            <div class="ratio ratio-16x9 mb-4">
+                {% if lesson.video_url %}
+                <iframe src="{{ lesson.video_url }}" allowfullscreen></iframe>
+                {% elif lesson.video_file %}
+                <video controls>
+                    <source src="{{ lesson.video_file.url }}" type="video/mp4">
+                    Ваш браузер не поддерживает видео.
+                </video>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            {% if lesson.image %}
+            <div class="text-center mb-4">
+                <img src="{{ lesson.image.url }}" class="img-fluid rounded" alt="{{ lesson.title }}" style="max-height: 400px;">
+            </div>
+            {% endif %}
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Содержание урока</h5>
+                    <div class="lesson-content">
+                        {{ lesson.content|linebreaks }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                {% if prev_lesson %}
+                <a href="{% url 'courses:lesson_detail' course.id prev_lesson.id %}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i> Предыдущий урок
+                </a>
+                {% else %}
+                <div></div>
+                {% endif %}
+
+                {% if next_lesson %}
+                <a href="{% url 'courses:lesson_detail' course.id next_lesson.id %}" class="btn btn-primary">
+                    Следующий урок <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+                {% else %}
+                <a href="{% url 'courses:course_detail' course.id %}" class="btn btn-success">
+                    Завершить курс <i class="fas fa-check ms-2"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Уроки курса</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for l in course.lessons.all %}
+                    <a href="{% url 'courses:lesson_detail' course.id l.id %}"
+                       class="list-group-item list-group-item-action {% if l.id == lesson.id %}active{% endif %}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <span>Урок {{ l.order_num }}: {{ l.title }}</span>
+                            <small>
+                                {% if l.has_video %}
+                                <i class="fas fa-video"></i>
+                                {% endif %}
+                            </small>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}ы

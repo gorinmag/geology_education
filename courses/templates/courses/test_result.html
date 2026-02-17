@@ -1,0 +1,39 @@
+{% extends 'courses/base.html' %}
+{% load static %}
+
+{% block title %}Результат теста{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'courses:course_list' %}">Курсы</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'courses:course_detail' course.id %}">{{ course.title }}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'courses:test_list' course.id %}">Тесты</a></li>
+            <li class="breadcrumb-item active">Результат</li>
+        </ol>
+    </nav>
+
+    <div class="card text-center">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Результат теста "{{ test.title }}"</h3>
+        </div>
+        <div class="card-body">
+            <h1 class="display-1">{{ attempt.score }} / {{ total_points }}</h1>
+            <p class="lead">Вы набрали {{ percent }}%</p>
+            {% if attempt.passed %}
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i> Тест пройден! Поздравляем!
+                </div>
+            {% else %}
+                <div class="alert alert-danger">
+                    <i class="fas fa-times-circle"></i> К сожалению, тест не пройден.
+                </div>
+            {% endif %}
+            <a href="{% url 'courses:course_detail' course.id %}" class="btn btn-primary mt-3">
+                Вернуться к курсу
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}>

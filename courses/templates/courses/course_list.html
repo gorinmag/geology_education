@@ -1,0 +1,41 @@
+{% extends 'courses/base.html' %}
+{% load static %}
+
+{% block title %}Все курсы{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-5">Все курсы по геологии</h1>
+    
+    <div class="row g-4">
+        {% for course in courses %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                {% if course.image %}
+                <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="{{ course.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ course.title }}</h5>
+                    <p class="card-text text-muted small">
+                        <i class="far fa-calendar-alt"></i> {{ course.created_at|date:"d.m.Y" }}
+                    </p>
+                    <p class="card-text">{{ course.description|truncatewords:20 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-primary">{{ course.lessons.count }} уроков</span>
+                        <a href="{% url 'courses:course_detail' course.id %}" class="btn btn-sm btn-outline-primary">Начать</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                Курсы пока не добавлены. Зайдите позже.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
