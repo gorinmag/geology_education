@@ -1,13 +1,18 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-your-secret-key-here-change-in-production'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-default-key-for-dev')
 
-DEBUG = False
+DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'False'
 
-ALLOWED_HOSTS = ['45.139.78.178','127.0.0.1', 'localhost']
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -54,11 +59,11 @@ WSGI_APPLICATION = 'geology_education.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'geology_db',
-        'USER': 'postgres',
-        'PASSWORD': 'admin',  # замените на свой пароль
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME', 'geology_db'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -81,3 +86,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'courses:login'
 LOGIN_REDIRECT_URL = 'courses:course_list'
 LOGOUT_REDIRECT_URL = 'courses:index'
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_HSTS_SECONDS = 31536000  # 1 год
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True

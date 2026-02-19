@@ -1,0 +1,35 @@
+# Виртуальное окружение
+venv/
+.env
+.env.local
+*.env
+
+# База данных
+*.sqlite3
+*.db
+
+# Медиа и статические файлы
+/media/
+/staticfiles/
+
+# Логи
+*.log
+logs/
+
+# Файлы конфигурации IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Файлы Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Директории с зависимостями
+pip-log.txt
+pip-delete-this-directory.txt

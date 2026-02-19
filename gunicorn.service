@@ -1,0 +1,13 @@
+[Unit]
+Description=gunicorn daemon for geology education
+After=network.target postgresql.service
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/home/username/geology_education
+Environment="PATH=/home/username/geology_education/venv/bin"
+ExecStart=/home/username/geology_education/venv/bin/gunicorn --config gunicorn.conf.py geology_education.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
