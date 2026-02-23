@@ -6,7 +6,7 @@ from django.utils import timezone
 from .models import (
     Course, Lesson, StudentProfile, LessonProgress,
     Test, TestQuestion, TestChoiceOption, TestAttempt, TestAnswer,
-    Exam, ExamQuestion, ExamChoiceOption, ExamTextAnswer, ExamAttempt, ExamAnswer, RegistrationRequest
+    Exam, ExamQuestion, ExamChoiceOption, ExamTextAnswer, ExamAttempt, ExamAnswer, RegistrationRequest, CourseMaterial
 )
 
 class StudentProfileInline(admin.StackedInline):
@@ -32,32 +32,32 @@ class LessonInline(admin.TabularInline):
         return "Нет изображения"
     image_preview.short_description = 'Предпросмотр'
 
-@admin.register(Course)
-class CourseAdmin(admin.ModelAdmin):
-    list_display = ['title', 'lesson_count', 'created_at', 'updated_at']
-    list_filter = ['created_at']
-    search_fields = ['title', 'description']
-    inlines = [LessonInline]
-    fieldsets = (
-        ('Основная информация', {
-            'fields': ('title', 'description', 'image_preview', 'image')
-        }),
-        ('Даты', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',)
-        }),
-    )
-    readonly_fields = ('created_at', 'updated_at', 'image_preview')
-
-    def lesson_count(self, obj):
-        return obj.lessons.count()
-    lesson_count.short_description = 'Количество уроков'
-
-    def image_preview(self, obj):
-        if obj and obj.image:
-            return format_html('<img src="{}" style="max-height: 100px; max-width: 200px;" />', obj.image.url)
-        return "Нет изображения"
-    image_preview.short_description = 'Предпросмотр'
+# @admin.register(Course)
+# class CourseAdmin(admin.ModelAdmin):
+#     list_display = ['title', 'lesson_count', 'created_at', 'updated_at']
+#     list_filter = ['created_at']
+#     search_fields = ['title', 'description']
+#     inlines = [LessonInline]
+#     fieldsets = (
+#         ('Основная информация', {
+#             'fields': ('title', 'description', 'image_preview', 'image')
+#         }),
+#         ('Даты', {
+#             'fields': ('created_at', 'updated_at'),
+#             'classes': ('collapse',)
+#         }),
+#     )
+#     readonly_fields = ('created_at', 'updated_at', 'image_preview')
+#
+#     def lesson_count(self, obj):
+#         return obj.lessons.count()
+#     lesson_count.short_description = 'Количество уроков'
+#
+#     def image_preview(self, obj):
+#         if obj and obj.image:
+#             return format_html('<img src="{}" style="max-height: 100px; max-width: 200px;" />', obj.image.url)
+#         return "Нет изображения"
+#     image_preview.short_description = 'Предпросмотр'
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
@@ -200,6 +200,60 @@ class RegistrationRequestAdmin(admin.ModelAdmin):
             user.delete()  # удаляем пользователя, заявка удалится каскадно
         self.message_user(request, f"Отклонено {queryset.count()} заявок (пользователи удалены).")
     reject_requests.short_description = "Отклонить выбранные заявки (удалить пользователей)"
+
+#Возможность добавить материал к курсу
+class CourseMaterialInline(admin.TabularInline):
+    """Инлайн для материалов курса в админке курса"""
+    model = CourseMaterial
+    extra = 1
+    fields = ['title', 'file', 'file_size', 'file_type', 'order']
+    readonly_fields = ['file_size', 'file_type']
+
+@admin.register(CourseMaterial)
+class CourseMaterialAdmin(admin.ModelAdmin):
+    list_display = ['title', 'course', 'file_type', 'file_size', 'created_at']
+    list_filter = ['course', 'file_type']
+    search_fields = ['title', 'description']
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ('course', 'title', 'description')
+        }),
+        ('Файл', {
+            'fields': ('file', 'file_size', 'file_type', 'icon')
+        }),
+        ('Настройки', {
+            'fields': ('order',)
+        }),
+    )
+    readonly_fields = ['file_size', 'file_type']
+
+# Добавьте инлайн в CourseAdmin
+@admin.register(Course)
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ['title', 'lesson_count', 'created_at', 'updated_at']
+    list_filter = ['created_at']
+    search_fields = ['title', 'description']
+    inlines = [LessonInline, CourseMaterialInline]  # Добавлено CourseMaterialInline
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ('title', 'description', 'image_preview', 'image')
+        }),
+        ('Даты', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    readonly_fields = ('created_at', 'updated_at', 'image_preview')
+
+    def lesson_count(self, obj):
+        return obj.lessons.count()
+    lesson_count.short_description = 'Количество уроков'
+
+    def image_preview(self, obj):
+        if obj and obj.image:
+            return format_html('<img src="{}" style="max-height: 100px; max-width: 200px;" />', obj.image.url)
+        return "Нет изображения"
+    image_preview.short_description = 'Предпросмотр'
 
 # Перерегистрируем User с нашей админкой
 admin.site.unregister(User)

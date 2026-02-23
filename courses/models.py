@@ -339,3 +339,91 @@ class RegistrationRequest(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.get_status_display()}"
+#Добавляю возможность прикладывать файлы
+class CourseMaterial(models.Model):
+    """Материалы для скачивания к курсу"""
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name='materials',
+        verbose_name='Курс'
+    )
+    title = models.CharField('Название материала', max_length=200)
+    description = models.TextField('Описание', blank=True)
+    file = models.FileField(
+        'Файл',
+        upload_to='courses/materials/',
+        help_text='Загрузите файл (PDF, DOC, XLS, ZIP и т.д.)'
+    )
+    file_size = models.CharField('Размер файла', max_length=20, blank=True, editable=False)
+    file_type = models.CharField('Тип файла', max_length=50, blank=True, editable=False)
+    icon = models.CharField('Иконка', max_length=20, default='fa-file',
+                            help_text='Класс иконки Font Awesome (например: fa-file-pdf, fa-file-word)')
+    order = models.PositiveIntegerField('Порядок', default=0)
+    created_at = models.DateTimeField('Дата добавления', auto_now_add=True)
+    updated_at = models.DateTimeField('Дата обновления', auto_now=True)
+
+    class Meta:
+        verbose_name = 'Материал курса'
+        verbose_name_plural = 'Материалы курса'
+        ordering = ['order', '-created_at']
+
+    def __str__(self):
+        return f"{self.course.title} - {self.title}"
+
+    def save(self, *args, **kwargs):
+        # Автоматически определяем размер и тип файла
+        if self.file:
+            # Получаем размер файла в байтах
+            size = self.file.size
+            if size < 1024:
+                self.file_size = f'{size} B'
+            elif size < 1024 * 1024:
+                self.file_size = f'{size / 1024:.1f} KB'
+            else:
+                self.file_size = f'{size / (1024 * 1024):.1f} MB'
+
+            # Определяем тип файла по расширению
+            import os
+            ext = os.path.splitext(self.file.name)[1].lower()
+            type_map = {
+                '.pdf': 'PDF документ',
+                '.doc': 'Word документ',
+                '.docx': 'Word документ',
+                '.xls': 'Excel таблица',
+                '.xlsx': 'Excel таблица',
+                '.ppt': 'PowerPoint презентация',
+                '.pptx': 'PowerPoint презентация',
+                '.txt': 'Текстовый файл',
+                '.zip': 'ZIP архив',
+                '.rar': 'RAR архив',
+                '.jpg': 'Изображение',
+                '.jpeg': 'Изображение',
+                '.png': 'Изображение',
+                '.gif': 'Изображение',
+                '.mp4': 'Видео',
+                '.mp3': 'Аудио',
+            }
+            self.file_type = type_map.get(ext, 'Файл')
+
+            # Автоматически устанавливаем иконку
+            icon_map = {
+                '.pdf': 'fa-file-pdf',
+                '.doc': 'fa-file-word',
+                '.docx': 'fa-file-word',
+                '.xls': 'fa-file-excel',
+                '.xlsx': 'fa-file-excel',
+                '.ppt': 'fa-file-powerpoint',
+                '.pptx': 'fa-file-powerpoint',
+                '.txt': 'fa-file-alt',
+                '.zip': 'fa-file-archive',
+                '.rar': 'fa-file-archive',
+                '.jpg': 'fa-file-image',
+                '.jpeg': 'fa-file-image',
+                '.png': 'fa-file-image',
+                '.mp4': 'fa-file-video',
+                '.mp3': 'fa-file-audio',
+            }
+            self.icon = icon_map.get(ext, 'fa-file')
+
+        super().save(*args, **kwargs)

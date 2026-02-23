@@ -4,163 +4,336 @@
 {% block title %}{{ course.title }}{% endblock %}
 
 {% block content %}
-<div class="container py-5">
+<div class="container py-4">
     <!-- Хлебные крошки -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'courses:course_list' %}">Курсы</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ course.title }}</li>
-                </ol>
-            </nav>
-        </div>
-    </div>
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'courses:course_list' %}">Курсы</a></li>
+            <li class="breadcrumb-item active">{{ course.title }}</li>
+        </ol>
+    </nav>
 
-    <div class="row">
-        <!-- Основная информация о курсе -->
-        <div class="col-lg-8">
-            <h1 class="mb-4">{{ course.title }}</h1>
+    <!-- Заголовок курса (для мобильных показываем сверху) -->
+    <h1 class="mb-4 d-md-none">{{ course.title }}</h1>
+
+    <!-- Две колонки с flexbox -->
+    <div style="display: flex; gap: 30px; align-items: flex-start;">
+        <!-- Левая колонка - основной контент (65%) -->
+        <div style="flex: 0 0 65%;">
+            <!-- Заголовок для десктопов -->
+            <h1 class="mb-4 d-none d-md-block">{{ course.title }}</h1>
 
             {% if course.image %}
-            <img src="{{ course.image.url }}" class="img-fluid rounded mb-4" alt="{{ course.title }}">
+            <img src="{{ course.image.url }}"
+                 class="img-fluid rounded mb-4"
+                 alt="{{ course.title }}"
+                 loading="lazy"
+                 style="width: 100%; max-height: 400px; object-fit: cover;">
             {% endif %}
 
+            <!-- Описание курса -->
             <div class="card mb-4">
                 <div class="card-body">
                     <h5 class="card-title">О курсе</h5>
                     <p class="card-text">{{ course.description|linebreaks }}</p>
                 </div>
             </div>
-
-            <!-- Навигационные вкладки: Уроки / Тесты / Экзамены -->
-            <ul class="nav nav-tabs mb-4" id="courseTab" role="tablist">
+            <!-- Блок с материалами для скачивания -->
+            {% if course.materials.all %}
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="fas fa-paperclip me-2 text-primary"></i>
+                        Материалы для скачивания
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for material in course.materials.all %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <i class="fas {{ material.icon }} fa-2x text-primary" style="width: 40px;"></i>
+                                <div>
+                                    <h6 class="mb-1">{{ material.title }}</h6>
+                                    {% if material.description %}
+                                    <p class="mb-1 text-muted small">{{ material.description }}</p>
+                                    {% endif %}
+                                    <small class="text-muted">
+                                        <i class="far fa-file me-1"></i> {{ material.file_type }}
+                                        ({{ material.file_size }})
+                                    </small>
+                                </div>
+                            </div>
+                            <a href="{% url 'courses:download_material' course.id material.id %}"
+                               class="btn btn-sm btn-outline-primary"
+                               download>
+                                <i class="fas fa-download me-1"></i> Скачать
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <!-- Вкладки -->
+            <ul class="nav nav-tabs" id="courseTabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="lessons-tab" data-bs-toggle="tab" data-bs-target="#lessons" type="button" role="tab" aria-controls="lessons" aria-selected="true">
-                        Уроки <span class="badge bg-secondary ms-1">{{ course.lessons.count }}</span>
+                    <button class="nav-link active"
+                            id="lessons-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#lessons"
+                            type="button"
+                            role="tab"
+                            aria-controls="lessons"
+                            aria-selected="true">
+                        Уроки <span class="badge bg-secondary">{{ lessons.count }}</span>
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="tests-tab" data-bs-toggle="tab" data-bs-target="#tests" type="button" role="tab" aria-controls="tests" aria-selected="false">
-                        Тесты <span class="badge bg-secondary ms-1">{{ course.tests.count }}</span>
+                    <button class="nav-link"
+                            id="tests-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#tests"
+                            type="button"
+                            role="tab"
+                            aria-controls="tests"
+                            aria-selected="false">
+                        Тесты <span class="badge bg-secondary">{{ course.tests.count }}</span>
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="exams-tab" data-bs-toggle="tab" data-bs-target="#exams" type="button" role="tab" aria-controls="exams" aria-selected="false">
-                        Экзамены <span class="badge bg-secondary ms-1">{{ course.exams.count }}</span>
+                    <button class="nav-link"
+                            id="exams-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#exams"
+                            type="button"
+                            role="tab"
+                            aria-controls="exams"
+                            aria-selected="false">
+                        Экзамены <span class="badge bg-secondary">{{ course.exams.count }}</span>
                     </button>
                 </li>
             </ul>
 
             <!-- Содержимое вкладок -->
-            <div class="tab-content" id="courseTabContent">
-                <!-- Вкладка Уроки -->
+            <div class="tab-content mt-4" id="courseTabsContent">
+                <!-- Вкладка с уроками -->
                 <div class="tab-pane fade show active" id="lessons" role="tabpanel" aria-labelledby="lessons-tab">
-                    <div class="card">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0">Уроки курса</h5>
-                        </div>
-                        <div class="list-group list-group-flush">
-                            {% for lesson in lessons %}
-                            <a href="{% url 'courses:lesson_detail' course.id lesson.id %}" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">Урок {{ lesson.order_num }}: {{ lesson.title }}</h6>
-                                    <small class="text-muted">
-                                        {% if lesson.has_video %}
-                                        <i class="fas fa-video"></i>
-                                        {% endif %}
-                                    </small>
+                    <div class="lessons-list">
+                        {% for lesson in lessons %}
+                        <div class="lesson-item {% if lesson.id == current_lesson_id %}active{% endif %}"
+                             style="padding: 15px; border-bottom: 1px solid #dee2e6; transition: background-color 0.2s;">
+                            <a href="{% url 'courses:lesson_detail' course.id lesson.id %}" style="text-decoration: none; color: inherit; display: block;">
+                                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 5px; color: #6c757d; font-size: 0.9rem;">
+                                    <span><i class="fas fa-book-open" style="color: var(--primary-color); width: 1.2rem;"></i> Урок {{ lesson.order_num }}</span>
+                                    {% if lesson.has_video %}
+                                    <span><i class="fas fa-video" style="color: var(--primary-color);"></i> Видео</span>
+                                    {% endif %}
                                 </div>
+                                <h5 style="margin-bottom: 0; font-size: 1.1rem;">{{ lesson.title }}</h5>
                             </a>
-                            {% empty %}
-                            <div class="list-group-item text-muted">
-                                В этом курсе пока нет уроков.
-                            </div>
-                            {% endfor %}
                         </div>
+                        {% empty %}
+                        <div class="text-center p-5 text-muted">
+                            <i class="fas fa-book-open fa-3x mb-3"></i>
+                            <p>В этом курсе пока нет уроков.</p>
+                        </div>
+                        {% endfor %}
                     </div>
                 </div>
 
-                <!-- Вкладка Тесты -->
+                <!-- Вкладка с тестами -->
                 <div class="tab-pane fade" id="tests" role="tabpanel" aria-labelledby="tests-tab">
-                    <div class="card">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0">Тесты курса</h5>
-                        </div>
-                        <div class="list-group list-group-flush">
-                            {% for test in course.tests.all %}
-                            <a href="{% url 'courses:test_list' course.id %}" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">{{ test.title }}</h6>
-                                    <small class="text-muted">{{ test.questions.count }} вопросов</small>
+                    <div class="tests-list">
+                        {% for test in course.tests.all %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <h5 class="card-title mb-1">{{ test.title }}</h5>
+                                        <p class="card-text text-muted small mb-2">{{ test.description|truncatewords:20 }}</p>
+                                        <div>
+                                            <span class="badge bg-info me-2">
+                                                <i class="fas fa-question-circle"></i> {{ test.questions.count }} вопросов
+                                            </span>
+                                            <span class="badge bg-secondary me-2">
+                                                <i class="fas fa-star"></i> {{ test.total_points }} баллов
+                                            </span>
+                                            <span class="badge bg-warning">
+                                                <i class="fas fa-check-circle"></i> Проходной: {{ test.passing_score }}%
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <a href="{% url 'courses:test_detail' course.id test.id %}"
+                                           class="btn btn-primary btn-sm">
+                                            Пройти тест
+                                        </a>
+                                    </div>
                                 </div>
-                                <p class="mb-1 text-muted small">{{ test.description|truncatewords:15 }}</p>
-                            </a>
-                            {% empty %}
-                            <div class="list-group-item text-muted">
-                                В этом курсе пока нет тестов.
                             </div>
-                            {% endfor %}
                         </div>
+                        {% empty %}
+                        <div class="text-center p-5 text-muted">
+                            <i class="fas fa-puzzle-piece fa-3x mb-3"></i>
+                            <p>В этом курсе пока нет тестов.</p>
+                        </div>
+                        {% endfor %}
                     </div>
                 </div>
 
-                <!-- Вкладка Экзамены -->
+                <!-- Вкладка с экзаменами -->
                 <div class="tab-pane fade" id="exams" role="tabpanel" aria-labelledby="exams-tab">
-                    <div class="card">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0">Экзамены курса</h5>
-                        </div>
-                        <div class="list-group list-group-flush">
-                            {% for exam in course.exams.all %}
-                            <a href="{% url 'courses:exam_list' course.id %}" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">{{ exam.title }}</h6>
-                                    <small class="text-muted">{{ exam.questions.count }} вопросов</small>
+                    <div class="exams-list">
+                        {% for exam in course.exams.all %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <h5 class="card-title mb-1">{{ exam.title }}</h5>
+                                        <p class="card-text text-muted small mb-2">{{ exam.description|truncatewords:20 }}</p>
+                                        <div>
+                                            <span class="badge bg-info me-2">
+                                                <i class="fas fa-question-circle"></i> {{ exam.questions.count }} вопросов
+                                            </span>
+                                            <span class="badge bg-secondary me-2">
+                                                <i class="fas fa-star"></i> {{ exam.total_points }} баллов
+                                            </span>
+                                            <span class="badge bg-warning me-2">
+                                                <i class="fas fa-check-circle"></i> Проходной: {{ exam.passing_score }}%
+                                            </span>
+                                            {% if exam.allow_retake %}
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-redo"></i> Можно пересдать
+                                            </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <a href="{% url 'courses:exam_detail' course.id exam.id %}"
+                                           class="btn btn-danger btn-sm">
+                                            Начать экзамен
+                                        </a>
+                                    </div>
                                 </div>
-                                <p class="mb-1 text-muted small">{{ exam.description|truncatewords:15 }}</p>
-                            </a>
-                            {% empty %}
-                            <div class="list-group-item text-muted">
-                                В этом курсе пока нет экзаменов.
                             </div>
-                            {% endfor %}
                         </div>
+                        {% empty %}
+                        <div class="text-center p-5 text-muted">
+                            <i class="fas fa-graduation-cap fa-3x mb-3"></i>
+                            <p>В этом курсе пока нет экзаменов.</p>
+                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Боковая панель с информацией о курсе -->
-        <div class="col-lg-4">
+        <!-- Правая колонка - информация о курсе (30%) -->
+        <div style="flex: 0 0 30%; position: sticky; top: 20px; align-self: flex-start;">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Информация</h5>
+                    <h5 class="card-title">Информация о курсе</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2">
-                            <i class="fas fa-book-open me-2"></i>
+                        <li class="mb-3">
+                            <i class="fas fa-book-open me-2 text-primary"></i>
                             <strong>Уроков:</strong> {{ lessons.count }}
                         </li>
-                        <li class="mb-2">
-                            <i class="fas fa-puzzle-piece me-2"></i>
+                        <li class="mb-3">
+                            <i class="fas fa-puzzle-piece me-2 text-primary"></i>
                             <strong>Тестов:</strong> {{ course.tests.count }}
                         </li>
-                        <li class="mb-2">
-                            <i class="fas fa-graduation-cap me-2"></i>
+                        <li class="mb-3">
+                            <i class="fas fa-graduation-cap me-2 text-primary"></i>
                             <strong>Экзаменов:</strong> {{ course.exams.count }}
                         </li>
-                        <li class="mb-2">
-                            <i class="far fa-calendar-alt me-2"></i>
+                        <li class="mb-3">
+                            <i class="far fa-calendar me-2 text-primary"></i>
                             <strong>Создан:</strong> {{ course.created_at|date:"d.m.Y" }}
                         </li>
-                        <li class="mb-2">
-                            <i class="fas fa-sync-alt me-2"></i>
-                            <strong>Обновлен:</strong> {{ course.updated_at|date:"d.m.Y" }}
+                        {% if user.is_authenticated %}
+                        <li class="mb-3">
+                            <i class="fas fa-chart-line me-2 text-primary"></i>
+                            <strong>Ваш прогресс:</strong>
+                            {% with viewed=user.lesson_progress.all.count %}
+                                {% if lessons.count > 0 %}
+                                    {% widthratio viewed lessons.count 100 as progress %}
+                                    <div class="progress mt-2" style="height: 5px;">
+                                        <div class="progress-bar bg-primary"
+                                             role="progressbar"
+                                             style="width: {{ progress }}%"
+                                             aria-valuenow="{{ progress }}"
+                                             aria-valuemin="0"
+                                             aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                    <small class="text-muted">{{ viewed }} из {{ lessons.count }} уроков</small>
+                                {% else %}
+                                    <span class="text-muted">Нет уроков</span>
+                                {% endif %}
+                            {% endwith %}
                         </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Небольшой отступ снизу -->
+<div style="height: 30px;"></div>
+
+<style>
+/* Стили для адаптивности */
+@media (max-width: 768px) {
+    .container > div[style*="display: flex"] {
+        flex-direction: column;
+    }
+
+    .container > div[style*="display: flex"] > div {
+        flex: 0 0 100% !important;
+        width: 100% !important;
+    }
+
+    .container > div[style*="display: flex"] > div:last-child {
+        position: relative !important;
+        top: 0 !important;
+        margin-top: 20px;
+    }
+}
+
+/* Стили для элементов уроков */
+.lesson-item:hover {
+    background-color: rgba(0,0,0,0.02);
+}
+
+.lesson-item.active {
+    background-color: #e7f1ff;
+    border-left: 3px solid var(--primary-color);
+}
+
+/* Стили для вкладок */
+.nav-tabs .nav-link {
+    color: #495057;
+}
+
+.nav-tabs .nav-link.active {
+    font-weight: 500;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Инициализация вкладок Bootstrap
+    var triggerTabList = [].slice.call(document.querySelectorAll('#courseTabs button'));
+    triggerTabList.forEach(function(triggerEl) {
+        var tabTrigger = new bootstrap.Tab(triggerEl);
+        triggerEl.addEventListener('click', function(event) {
+            event.preventDefault();
+            tabTrigger.show();
+        });
+    });
+});
+</script>
 {% endblock %}

@@ -22,5 +22,7 @@ urlpatterns = [
     path('course/<int:course_id>/exams/', views.exam_list, name='exam_list'),
     path('course/<int:course_id>/exam/<int:exam_id>/', views.exam_detail, name='exam_detail'),
     path('course/<int:course_id>/exam/<int:exam_id>/result/<int:attempt_id>/', views.exam_result, name='exam_result'),
+    #Материалы к курсу
+    path('course/<int:course_id>/material/<int:material_id>/download/', views.download_material, name='download_material'),
 
 ]

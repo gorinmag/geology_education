@@ -1,0 +1,66 @@
+{% extends 'courses/base.html' %}
+{% load static %}
+
+{% block title %}Результат экзамена{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'courses:course_list' %}">Курсы</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'courses:course_detail' course.id %}">{{ course.title }}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'courses:exam_list' course.id %}">Экзамены</a></li>
+            <li class="breadcrumb-item active">Результат</li>
+        </ol>
+    </nav>
+
+    <div class="card text-center">
+        <div class="card-header bg-danger text-white">
+            <h3 class="mb-0">Результат экзамена "{{ exam.title }}"</h3>
+        </div>
+        <div class="card-body py-5">
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-4">
+                    <div class="display-1 fw-bold {% if attempt.passed %}text-success{% else %}text-danger{% endif %}">
+                        {{ percent }}%
+                    </div>
+                    <p class="lead">Ваш результат</p>
+                </div>
+                <div class="col-md-4">
+                    <div class="display-1 fw-bold">{{ attempt.score }} / {{ total_points }}</div>
+                    <p class="lead">Набрано баллов</p>
+                </div>
+            </div>
+
+            {% if attempt.passed %}
+                <div class="alert alert-success py-3 mb-4">
+                    <i class="fas fa-check-circle fa-2x me-2"></i>
+                    <strong>Поздравляем!</strong> Вы успешно сдали экзамен!
+                </div>
+            {% else %}
+                <div class="alert alert-danger py-3 mb-4">
+                    <i class="fas fa-times-circle fa-2x me-2"></i>
+                    <strong>К сожалению, экзамен не сдан.</strong>
+                    {% if exam.allow_retake %}
+                        <p class="mb-0 mt-2">Вы можете попробовать снова.</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            <div class="mt-4">
+                <a href="{% url 'courses:exam_list' course.id %}" class="btn btn-primary btn-lg me-2">
+                    <i class="fas fa-list me-2"></i>К списку экзаменов
+                </a>
+                <a href="{% url 'courses:course_detail' course.id %}" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-book me-2"></i>К курсу
+                </a>
+                {% if exam.allow_retake and not attempt.passed %}
+                <a href="{% url 'courses:exam_detail' course.id exam.id %}" class="btn btn-danger btn-lg">
+                    <i class="fas fa-redo me-2"></i>Попробовать снова
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

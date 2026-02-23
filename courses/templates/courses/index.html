@@ -1,7 +1,7 @@
 {% extends 'courses/base.html' %}
 {% load static %}
 
-{% block title %}Главная - Обучение геологии{% endblock %}
+{% block title %}Прикладная геология{% endblock %}
 
 {% block content %}
 <section class="hero-section py-5">
@@ -33,7 +33,7 @@
                     {% if course.image %}
                     <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}" style="height: 200px; object-fit: cover;">
                     {% else %}
-                    <img src="https://images.wallpaperscraft.com/image/single/river_relief_mountains_177680_1600x1200.jpg" class="card-img-top" alt="{{ course.title }}">
+                    <img src="{% if course.image %}{{ course.image.url }}{% else %}https://images.wallpaperscraft.com/image/single/river_relief_mountains_177680_1600x1200.jpg{% endif %}" class="card-img-top" alt="{{ course.title }}">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ course.title }}</h5>

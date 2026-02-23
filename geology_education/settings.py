@@ -8,10 +8,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-default-key-for-dev')
 
-DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'False'
+DEBUG = True
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
-
+ALLOWED_HOSTS = ['geo-education.ru', 'www.geo-education.ru', '127.0.0.1', 'localhost', '45.139.78.178']
+# ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 INSTALLED_APPS = [
@@ -88,7 +88,8 @@ LOGIN_REDIRECT_URL = 'courses:course_list'
 LOGOUT_REDIRECT_URL = 'courses:index'
 
 if not DEBUG:
-    SECURE_SSL_REDIRECT = True
+    #Нужно будет исправить на True
+    SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True

@@ -1,24 +1,15 @@
 /* ==========================================================================
-   Стили в стиле Яндекс.Учебника (education.yandex.ru/handbook/ml)
-   Актуальная цветовая палитра
+   Адаптивный дизайн для всех устройств
    ========================================================================== */
 
-/* --- Подключение шрифтов --- */
 :root {
-    --font-primary: 'Yandex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-
-    /* Цветовая палитра Яндекс.Учебника */
-    --color-bg-primary: #ffffff;          /* Основной фон страницы */
-    --color-bg-secondary: #f9f9fb;        /* Фон для карточек и подвала */
-    --color-bg-accent: #f0f2f5;           /* Фон для выделенных элементов (code, nav) */
-    --color-text-primary: #1a1b22;        /* Основной цвет текста */
-    --color-text-secondary: #7f828b;      /* Второстепенный текст */
-    --color-text-tertiary: #b3b6bf;       /* Самый светлый текст (мета-информация) */
-    --color-accent: #6d93f4;               /* Акцентный синий (ссылки, кнопки) */
-    --color-accent-hover: #88b0f3;         /* Более тёмный синий для ховера */
-    --color-border: #e6e8ed;               /* Цвет границ */
-    --color-card-shadow: rgba(0, 0, 0, 0.04); /* Тень для карточек */
+    --primary-color: #4d7cfe;
+    --primary-dark: #3a62d1;
+    --text-primary: #1a1b22;
+    --text-secondary: #7f828b;
+    --bg-light: #f9f9fb;
+    --border-color: #e6e8ed;
+    --spacing-base: 1rem;
 }
 
 /* --- Базовые стили --- */
@@ -28,168 +19,98 @@
     padding: 0;
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    font-family: var(--font-primary);
-    color: var(--color-text-primary);
-    background-color: var(--color-bg-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    color: var(--text-primary);
+    background-color: #fff;
     line-height: 1.6;
     font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Минимальная высота на всю видимую область */
+}
+main {
+    flex: 1 0 auto; /* Основной контент занимает всё доступное пространство */
+    width: 100%;
 }
 
-/* --- Типографика --- */
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 500;
-    line-height: 1.3;
-    color: var(--color-text-primary);
+.container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
 }
 
-h1 {
-    font-size: 2.5rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    margin-bottom: 1.5rem;
-}
+/* --- Типография, адаптивная для всех экранов --- */
+h1 { font-size: clamp(2rem, 5vw, 3rem); }
+h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
+h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
+h4 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
+p { font-size: clamp(1rem, 2vw, 1.125rem); }
 
-h2 {
-    font-size: 2rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    margin: 2.5rem 0 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--color-border);
-}
-
-h3 {
-    font-size: 1.5rem;
-    font-weight: 500;
-    margin: 2rem 0 1rem;
-}
-
-p {
-    margin-bottom: 1.25rem;
-    color: var(--color-text-primary);
-}
-
-a {
-    color: var(--color-accent);
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-a:hover {
-    color: var(--color-accent-hover);
-    text-decoration: underline;
-}
-
-/* --- Навигационная панель --- */
+/* --- Навигация --- */
 .navbar {
-    background-color: var(--color-bg-primary) !important;
-    border-bottom: 1px solid var(--color-border);
-    padding: 0.75rem 1rem;
-    box-shadow: none;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 .navbar-brand {
     font-weight: 600;
-    font-size: 1.25rem;
-    color: var(--color-text-primary) !important;
-    letter-spacing: -0.01em;
-}
-
-.navbar-brand i, .navbar-brand .fas {
-    color: var(--color-accent);
-    margin-right: 0.5rem;
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
 }
 
 .navbar-nav .nav-link {
-    color: var(--color-text-secondary) !important;
-    font-weight: 400;
-    padding: 0.5rem 1rem !important;
-    font-size: 0.95rem;
-    transition: color 0.2s ease;
+    padding: 0.5rem 1rem;
+    font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
-.navbar-nav .nav-link:hover,
-.navbar-nav .nav-link:focus {
-    color: var(--color-text-primary) !important;
-    background-color: transparent;
-}
-
-.navbar-nav .btn-outline-light {
-    color: var(--color-text-secondary) !important;
-    border-color: var(--color-border);
-    background-color: transparent;
-    padding: 0.375rem 1rem;
-    font-size: 0.95rem;
-    border-radius: 20px;
-}
-
-.navbar-nav .btn-outline-light:hover {
-    background-color: var(--color-bg-secondary);
-    border-color: var(--color-border);
-    color: var(--color-text-primary) !important;
-}
-
-/* --- Герой-секция (главная страница) --- */
+/* --- Герой-секция --- */
 .hero-section {
-    background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
-    padding: 4rem 0 3rem;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid var(--color-border);
-    color: var(--color-text-primary);
+    padding: clamp(2rem, 8vw, 4rem) 0;
+    background: linear-gradient(135deg, var(--bg-light) 0%, #fff 100%);
 }
 
-.hero-section h1 {
-    font-size: 3rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    margin-bottom: 1rem;
+.hero-section .row {
+    align-items: center;
 }
 
-.hero-section .lead {
-    font-size: 1.25rem;
-    color: var(--color-text-secondary);
-    max-width: 80%;
-}
-
-.hero-section .btn-primary {
-    background-color: var(--color-accent);
-    border: none;
-    border-radius: 24px;
+.hero-section .btn {
     padding: 0.75rem 2rem;
-    font-weight: 500;
-    font-size: 1rem;
-    box-shadow: none;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.hero-section .btn-primary:hover {
-    background-color: var(--color-accent-hover);
-    transform: scale(1.02);
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
 }
 
 /* --- Карточки курсов --- */
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
 .card {
-    border: 1px solid var(--color-border);
-    border-radius: 16px;
-    background-color: var(--color-bg-primary);
-    box-shadow: 0 4px 12px var(--color-card-shadow);
-    transition: box-shadow 0.2s ease, border-color 0.2s ease;
-    overflow: hidden;
     height: 100%;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: #fff;
 }
 
 .card:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    border-color: #d0d4dd;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
 .card-img-top {
-    border-bottom: 1px solid var(--color-border);
-    background-color: var(--color-bg-secondary);
-    aspect-ratio: 16 / 9;
+    width: 100%;
+    height: 200px;
     object-fit: cover;
 }
 
@@ -199,342 +120,608 @@ a:hover {
 
 .card-title {
     font-size: 1.25rem;
-    font-weight: 600;
     margin-bottom: 0.75rem;
-    color: var(--color-text-primary);
-}
-
-.card-text {
-    color: var(--color-text-secondary);
-    font-size: 0.95rem;
-    margin-bottom: 1rem;
-}
-
-.card .badge {
-    background-color: var(--color-bg-secondary) !important;
-    color: var(--color-text-secondary);
-    font-weight: 400;
-    font-size: 0.85rem;
-    padding: 0.4rem 0.75rem;
-    border-radius: 20px;
-    border: 1px solid var(--color-border);
-}
-
-.card .btn-outline-primary {
-    border: 1px solid var(--color-border);
-    color: var(--color-text-primary);
-    background-color: transparent;
-    border-radius: 20px;
-    padding: 0.4rem 1.25rem;
-    font-size: 0.95rem;
-    font-weight: 400;
-    transition: all 0.2s ease;
-}
-
-.card .btn-outline-primary:hover {
-    background-color: var(--color-bg-secondary);
-    border-color: var(--color-border);
-    color: var(--color-accent);
-    text-decoration: none;
 }
 
 /* --- Детальная страница курса --- */
-.breadcrumb {
-    background-color: transparent;
-    padding: 0;
-    margin-bottom: 1.5rem;
-    font-size: 0.9rem;
+.course-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
 }
 
-.breadcrumb-item a {
-    color: var(--color-text-secondary);
-}
-
-.breadcrumb-item.active {
-    color: var(--color-text-primary);
-    font-weight: 500;
-}
-
-.breadcrumb-item + .breadcrumb-item::before {
-    color: var(--color-text-tertiary);
-    content: "•";
-}
-
-/* Список уроков/тестов/экзаменов */
-.list-group {
-    border-radius: 12px;
-    border: 1px solid var(--color-border);
+.lessons-list {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
     overflow: hidden;
 }
 
-.list-group-item {
-    border: none;
-    border-bottom: 1px solid var(--color-border);
+.lesson-item {
     padding: 1rem 1.5rem;
-    background-color: var(--color-bg-primary);
-    color: var(--color-text-primary);
-    transition: background-color 0.2s ease;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s;
 }
 
-.list-group-item:last-child {
+.lesson-item:last-child {
     border-bottom: none;
 }
 
-.list-group-item:hover {
-    background-color: var(--color-bg-secondary);
-    text-decoration: none;
-}
-
-.list-group-item.active {
-    background-color: var(--color-bg-secondary);
-    color: var(--color-accent);
-    font-weight: 500;
-    border-left: 3px solid var(--color-accent);
-}
-
-.list-group-item h6 {
-    margin-bottom: 0;
-    font-weight: 500;
-    font-size: 1rem;
-}
-
-.list-group-item small {
-    color: var(--color-text-tertiary);
-    font-size: 0.85rem;
-}
-
-/* Боковая панель */
-.card .list-unstyled li {
-    color: var(--color-text-secondary);
-    font-size: 0.95rem;
-    padding: 0.5rem 0;
-    border-bottom: 1px dashed var(--color-border);
-}
-
-.card .list-unstyled li:last-child {
-    border-bottom: none;
-}
-
-.card .list-unstyled i {
-    color: var(--color-accent);
-    width: 1.5rem;
+.lesson-item:hover {
+    background-color: var(--bg-light);
 }
 
 /* --- Страница урока --- */
-.lesson-content {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: var(--color-text-primary);
+.lesson-header {
+    margin-bottom: 2rem;
 }
 
-.lesson-content p {
+.lesson-video {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    overflow: hidden;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+}
+
+.lesson-video iframe,
+.lesson-video video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.lesson-content {
+    font-size: 1.125rem;
+    line-height: 1.8;
+}
+
+.lesson-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+    gap: 1rem;
+}
+
+/* --- Адаптивные сетки --- */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+[class*="col-"] {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+/* --- Bootstrap-подобные классы для сетки --- */
+.col { flex: 1 0 0%; }
+.col-auto { flex: 0 0 auto; width: auto; }
+
+/* --- Медиа-запросы для разных устройств --- */
+
+/* Мобильные телефоны (до 576px) */
+@media (max-width: 576px) {
+    .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .hero-section {
+        text-align: center;
+    }
+
+    .hero-section img {
+        margin-top: 2rem;
+    }
+
+    .course-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .lesson-navigation {
+        flex-direction: column;
+    }
+
+    .lesson-navigation .btn {
+        width: 100%;
+    }
+
+    .card-img-top {
+        height: 180px;
+    }
+
+    /* Мобильное меню */
+    .navbar-nav .nav-link {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .navbar-nav .nav-link:last-child {
+        border-bottom: none;
+    }
+
+    /* Табы */
+    .nav-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-tabs .nav-link {
+        white-space: nowrap;
+    }
+}
+
+/* Планшеты (577px - 768px) */
+@media (min-width: 577px) and (max-width: 768px) {
+    .container {
+        max-width: 720px;
+    }
+
+    .course-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .courses-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero-section .row {
+        flex-direction: column-reverse;
+    }
+
+    .hero-section img {
+        margin-bottom: 2rem;
+    }
+}
+
+/* Небольшие ноутбуки (769px - 992px) */
+@media (min-width: 769px) and (max-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
+
+    .courses-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Десктопы (993px и выше) */
+@media (min-width: 993px) {
+    .container {
+        max-width: 1200px;
+    }
+
+    .courses-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* --- Утилиты для адаптивности --- */
+.d-none { display: none; }
+.d-block { display: block; }
+
+@media (min-width: 768px) {
+    .d-md-block { display: block; }
+    .d-md-none { display: none; }
+}
+
+/* --- Табы (вкладки) --- */
+.nav-tabs {
+    border-bottom: 2px solid var(--border-color);
     margin-bottom: 1.5rem;
 }
 
-.lesson-content h2, .lesson-content h3 {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    border-bottom: none;
-}
-
-.lesson-content pre, .lesson-content code {
-    font-family: var(--font-mono);
-    background-color: var(--color-bg-secondary);
-    border-radius: 8px;
-    padding: 0.2rem 0.4rem;
-    font-size: 0.95em;
-    color: var(--color-text-primary);
-    border: 1px solid var(--color-border);
-}
-
-.lesson-content pre {
-    padding: 1rem;
-    overflow-x: auto;
-}
-
-.lesson-content pre code {
-    background-color: transparent;
+.nav-tabs .nav-link {
+    color: var(--text-secondary);
     border: none;
-    padding: 0;
-}
-
-/* --- Кнопки навигации и действий --- */
-.btn-outline-primary, .btn-primary, .btn-success {
-    border-radius: 24px;
-    padding: 0.6rem 1.5rem;
+    padding: 0.75rem 1.5rem;
     font-weight: 500;
-    font-size: 0.95rem;
-    border: 1px solid transparent;
-    transition: all 0.2s ease;
 }
 
-.btn-outline-primary {
-    border: 1px solid var(--color-border);
-    color: var(--color-text-primary);
-    background-color: transparent;
+.nav-tabs .nav-link:hover {
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
 }
 
-.btn-outline-primary:hover {
-    background-color: var(--color-bg-secondary);
-    border-color: var(--color-border);
-    color: var(--color-accent);
-    text-decoration: none;
+.nav-tabs .nav-link.active {
+    color: var(--primary-color);
+    background: none;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+/* --- Кнопки --- */
+.btn {
+    padding: 0.5rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 500;
+    transition: all 0.2s;
+    white-space: nowrap;
 }
 
 .btn-primary {
-    background-color: var(--color-accent);
+    background-color: var(--primary-color);
     border: none;
-    color: white;
 }
 
 .btn-primary:hover {
-    background-color: var(--color-accent-hover);
-    transform: translateY(-1px);
-}
-
-.btn-success {
-    background-color: #28a745; /* Оставляем стандартный зелёный для "Завершить курс" */
-    border: none;
-    color: white;
-}
-
-.btn-success:hover {
-    background-color: #218838;
-    transform: translateY(-1px);
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
 }
 
 /* --- Формы --- */
 .form-control {
-    border-radius: 12px;
-    border: 1px solid var(--color-border);
     padding: 0.75rem 1rem;
-    font-size: 1rem;
-    color: var(--color-text-primary);
-    background-color: var(--color-bg-primary);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
 }
 
 .form-control:focus {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px rgba(77, 124, 254, 0.2);
-    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(77, 124, 254, 0.1);
 }
 
-.form-label {
-    font-weight: 500;
-    color: var(--color-text-secondary);
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-}
-
-/* --- Алерты и сообщения --- */
-.alert {
-    border-radius: 12px;
-    border: 1px solid transparent;
-    padding: 1rem 1.5rem;
-    margin-bottom: 1.5rem;
-    font-size: 0.95rem;
-}
-
-.alert-success {
-    background-color: #e3f7e3;
-    border-color: #c3e6c3;
-    color: #1f6d1f;
-}
-
-.alert-error, .alert-danger {
-    background-color: #fee9e9;
-    border-color: #fccfcf;
-    color: #b02a37;
-}
-
-.alert-info {
-    background-color: #e6f0ff;
-    border-color: #c2d6ff;
-    color: var(--color-accent-hover);
+/* --- Адаптивные изображения --- */
+.img-fluid {
+    max-width: 100%;
+    height: auto;
 }
 
 /* --- Футер --- */
-footer {
-    background-color: var(--color-bg-secondary) !important;
-    border-top: 1px solid var(--color-border);
-    color: var(--color-text-secondary);
-    margin-top: 4rem !important;
+.footer {
+    background-color: var(--bg-light);
+    border-top: 1px solid var(--border-color);
+    padding: 1.5rem 0;
+    margin-top: auto; /* Важно: прижимает футер к низу */
+    flex-shrink: 0; /* Запрещаем сжиматься */
+    width: 100%;
+}
+.footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.footer p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
 }
 
-footer p {
-    color: var(--color-text-secondary);
-    font-size: 0.9rem;
+.footer-links {
+    display: flex;
+    gap: 1.5rem;
 }
 
-/* --- Адаптивность --- */
-@media (max-width: 768px) {
-    h1 {
-        font-size: 2rem;
+.footer-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+    font-size: 0.95rem;
+}
+
+.footer-links a:hover {
+    color: var(--primary-color);
+}
+/* --- Улучшения для touch-устройств --- */
+@media (hover: none) and (pointer: coarse) {
+    .btn, .nav-link, .dropdown-item {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 0.75rem 1rem;
     }
 
-    .hero-section h1 {
-        font-size: 2.2rem;
+    .card:hover {
+        transform: none;
     }
 
-    .hero-section .lead {
-        max-width: 100%;
+    .btn:active {
+        transform: scale(0.98);
+    }
+    .footer .container {
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
     }
 
-    .navbar-nav .btn-outline-light {
-        margin-top: 0.5rem;
-    }
-
-    .card-body {
-        padding: 1.25rem;
-    }
-
-    .breadcrumb {
-        font-size: 0.85rem;
+    .footer-links {
+        justify-content: center;
     }
 }
+/* ==========================================================================
+   Улучшенный список уроков
+   ========================================================================== */
 
-/* --- Вкладки (для страницы курса) --- */
-.nav-tabs {
-    border-bottom: 1px solid var(--color-border);
-}
-
-.nav-tabs .nav-link {
-    color: var(--color-text-secondary);
-    border: none;
-    padding: 0.75rem 1.25rem;
-    font-weight: 500;
-    margin-right: 0.5rem;
-    border-radius: 0;
-}
-
-.nav-tabs .nav-link:hover {
-    color: var(--color-text-primary);
-    background-color: transparent;
-    border-bottom: 2px solid var(--color-border);
-}
-
-.nav-tabs .nav-link.active {
-    color: var(--color-accent);
-    background-color: transparent;
-    border-bottom: 2px solid var(--color-accent);
-}
-
-.nav-tabs .badge {
-    background-color: var(--color-bg-secondary);
-    color: var(--color-text-secondary);
-    font-weight: 400;
-}
-
-/* --- Прогресс-бар (для страницы "Мои курсы") --- */
-.progress {
-    background-color: var(--color-bg-secondary);
-    border-radius: 10px;
-    height: 8px;
+/* Контейнер списка уроков */
+.lessons-list {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
     overflow: hidden;
+    margin: 1.5rem 0;
 }
 
-.progress-bar {
-    background-color: var(--color-accent);
-    border-radius: 10px;
+/* Элемент урока */
+.lesson-item {
+    padding: 1.5rem 2rem;  /* Увеличенные отступы */
+    border-bottom: 2px solid var(--border-color);  /* Более толстая разделительная рамка */
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    position: relative;
+}
+
+/* Убираем рамку у последнего элемента */
+.lesson-item:last-child {
+    border-bottom: none;
+}
+
+/* Эффект при наведении */
+.lesson-item:hover {
+    background-color: var(--bg-light);
+    transform: translateX(5px);
+}
+
+/* Ссылка внутри урока */
+.lesson-item a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+/* Заголовок урока */
+.lesson-item h5 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+/* Мета-информация урока (номер, длительность и т.д.) */
+.lesson-meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.lesson-meta i {
+    color: var(--primary-color);
+    width: 1.2rem;
+}
+
+/* Описание урока */
+.lesson-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-top: 0.5rem;
+}
+
+/* Статус урока (пройден/не пройден) */
+.lesson-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.lesson-status.completed {
+    background-color: #e3f7e3;
+    color: #1f6d1f;
+}
+
+.lesson-status.in-progress {
+    background-color: #fff3e0;
+    color: #b45b0a;
+}
+
+/* Иконка стрелки справа */
+.lesson-arrow {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.lesson-item:hover .lesson-arrow {
+    opacity: 1;
+    transform: translate(5px, -50%);
+}
+
+/* Компактный вид для мобильных */
+@media (max-width: 768px) {
+    .lesson-item {
+        padding: 1.2rem 1.5rem;
+    }
+
+    .lesson-item h5 {
+        font-size: 1.1rem;
+        padding-right: 2rem; /* Место для стрелки */
+    }
+
+    .lesson-arrow {
+        right: 1.5rem;
+        opacity: 0.5; /* Всегда видна на мобильных */
+    }
+
+    .lesson-item:hover {
+        transform: none; /* Убираем сдвиг на мобильных */
+    }
+}
+
+/* Очень маленькие экраны */
+@media (max-width: 480px) {
+    .lesson-item {
+        padding: 1rem;
+    }
+
+    .lesson-meta {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+}
+
+/* Альтернативный вариант с точками вместо стрелок (опционально) */
+.lesson-item-with-dots::before {
+    content: "•";
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.3;
+}
+
+/* Стили для активного/текущего урока */
+.lesson-item.active {
+    background-color: var(--bg-light);
+    border-left: 4px solid var(--primary-color);
+}
+
+.lesson-item.active h5 {
+    color: var(--primary-color);
+}
+/* Стиль с крупной нумерацией */
+.lesson-item-numbered {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.lesson-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    opacity: 0.3;
+    min-width: 3rem;
+    text-align: center;
+}
+
+.lesson-content {
+    flex: 1;
+}
+
+.lesson-content h5 {
+    margin-bottom: 0.5rem;
+}
+
+.lesson-item-numbered:hover .lesson-number {
+    opacity: 0.8;
+}
+
+/* Стили для навигации между уроками */
+.lesson-navigation-container {
+    margin-bottom: 0.5cm;  /* Отступ от низа 0.5 см */
+}
+
+@media (max-width: 768px) {
+    .lesson-navigation-container {
+        margin-bottom: 0.3cm;  /* Чуть меньше на мобильных */
+    }
+}
+.content-wrapper {
+    min-height: calc(100vh - 200px); /* 200px - высота навбара и футера */
+    padding-bottom: 20px;
+}
+.lesson-content-card {
+    max-height: 500px; /* Максимальная высота */
+    overflow-y: auto;  /* Добавляем прокрутку если контент не помещается */
+}
+.lesson-content-card .card-body {
+    padding: 1.5rem;
+}
+
+.lesson-content {
+    font-size: 1.125rem;
+    line-height: 1.8;
+}
+
+/* Для мобильных устройств */
+@media (max-width: 768px) {
+    .lesson-content-card {
+        max-height: 400px; /* Чуть меньше на мобильных */
+    }
+}
+.lesson-content p:empty {
+    display: none;
+    margin: 0;
+    padding: 0;
+    height: 0;
+}
+/* Стили для материалов курса */
+.material-item {
+    transition: background-color 0.2s;
+}
+
+.material-item:hover {
+    background-color: rgba(0,123,255,0.05);
+}
+
+.material-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    color: var(--primary-color);
+}
+
+.material-info {
+    flex: 1;
+}
+
+.material-title {
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.material-meta {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.material-download-btn {
+    padding: 0.375rem 1rem;
+    border-radius: 20px;
+    transition: all 0.2s;
+}
+
+.material-download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 576px) {
+    .material-item .d-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 10px;
+    }
+
+    .material-download-btn {
+        align-self: flex-end;
+    }
 }

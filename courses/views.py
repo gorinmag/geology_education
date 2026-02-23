@@ -7,11 +7,13 @@ from django.db import transaction
 from .models import (
     Course, Lesson, StudentProfile, LessonProgress,
     Test, TestQuestion, TestChoiceOption, TestAttempt, TestAnswer,
-    Exam, ExamQuestion, ExamChoiceOption, ExamTextAnswer, ExamAttempt, ExamAnswer, RegistrationRequest
+    Exam, ExamQuestion, ExamChoiceOption, ExamTextAnswer, ExamAttempt, ExamAnswer, RegistrationRequest, CourseMaterial
 )
 from .forms import StudentRegistrationForm
 from django.db.models import Count, Sum, Q
 from django.utils import timezone
+from django.http import FileResponse, Http404
+import os
 def index(request):
     courses = Course.objects.all()[:3]
     return render(request, 'courses/index.html', {'courses': courses})
@@ -337,3 +339,23 @@ def exam_result(request, course_id, exam_id, attempt_id):
         'total_points': total_points,
         'percent': percent
     })
+
+
+@login_required
+def download_material(request, course_id, material_id):
+    """Скачивание материала курса"""
+    course = get_object_or_404(Course, id=course_id)
+    material = get_object_or_404(CourseMaterial, id=material_id, course=course)
+
+    # Проверяем существование файла
+    if not material.file:
+        raise Http404("Файл не найден")
+
+    # Отправляем файл
+    response = FileResponse(material.file, as_attachment=True)
+
+    # Устанавливаем имя файла для скачивания
+    filename = os.path.basename(material.file.name)
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    return response
