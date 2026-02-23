@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-default-key-for-dev')
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['geo-education.ru', 'www.geo-education.ru', '127.0.0.1', 'localhost', '45.139.78.178']
 # ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
