@@ -8,7 +8,7 @@
 from django.shortcuts import redirect
 from django.contrib import messages
 from functools import wraps
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 def admin_required(view_func):
     """

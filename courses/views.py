@@ -13,6 +13,7 @@ from .forms import StudentRegistrationForm
 from django.db.models import Count, Sum, Q
 from django.utils import timezone
 from django.http import FileResponse, Http404
+from django.contrib.auth.mixins import LoginRequiredMixin
 import os
 def index(request):
     courses = Course.objects.all()[:3]
@@ -359,3 +360,17 @@ def download_material(request, course_id, material_id):
     response['Content-Disposition'] = f'attachment; filename="{filename}"'
 
     return response
+
+@login_required
+def course_list(request):
+    courses = Course.objects.all()
+    return render(request, 'courses/course_list.html', {'courses': courses})
+
+@login_required
+def course_detail(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    lessons = course.lessons.all()
+    return render(request, 'courses/course_detail.html', {
+        'course': course,
+        'lessons': lessons
+    })
